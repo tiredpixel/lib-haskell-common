@@ -3,6 +3,7 @@ module TPX.Com.API.Res (
     intErr ,
     intErr',
     notFound,
+    run,
     runValidate
     ) where
 
@@ -35,6 +36,13 @@ notFound = do
     modifyResponse $ setResponseCode 404
     res <- getResponse
     finishWith res
+
+run :: Snap a1 -> MaybeT Snap a2 -> Snap (Maybe a2)
+run f e = do
+    r_ <- runMaybeT e
+    case r_ of
+        Just r  -> return $ Just r
+        Nothing -> f >> return Nothing
 
 runValidate :: Either RC.ErrorN a -> Snap (Maybe a)
 runValidate e = case e of
