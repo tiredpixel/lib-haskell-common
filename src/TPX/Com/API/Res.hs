@@ -2,6 +2,7 @@ module TPX.Com.API.Res (
     badReq,
     intErr ,
     intErr',
+    noContent,
     notFound,
     run,
     runValidate
@@ -30,6 +31,9 @@ intErr' :: SomeException -> Snap ()
 intErr' ex = do
     intErr ex
     liftIO $ Sig.raiseSignal Sig.sigINT
+
+noContent :: Snap ()
+noContent = modifyResponse $ setResponseCode 204
 
 notFound :: Snap ()
 notFound = do

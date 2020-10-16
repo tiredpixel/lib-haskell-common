@@ -1,6 +1,7 @@
 module TPX.Com.API.Test (
     module E,
     assertElemN,
+    assertNoContent,
     logReq ,
     logReq',
     logRes,
@@ -26,6 +27,11 @@ assertElemN :: Response -> Int -> IO ()
 assertElemN res n = do
     b <- getResponseBody res
     length (b ^. _Object) `shouldBe` n
+
+assertNoContent :: Response -> IO ()
+assertNoContent res = do
+    rspStatus res `shouldBe` 204
+    assertElemN res 0
 
 logReq :: FilePath -> RequestBuilder IO () -> IO ()
 logReq tag req = do
