@@ -1,5 +1,6 @@
 module TPX.Com.API.Res (
     badReq,
+    created,
     intErr ,
     intErr',
     noContent,
@@ -9,6 +10,7 @@ module TPX.Com.API.Res (
     ) where
 
 
+import              Data.Aeson.Types                        (ToJSON)
 import              Snap.Core
 import              Snap.Extras.JSON
 import qualified    System.Posix.Signals                    as  Sig
@@ -21,6 +23,12 @@ badReq err = do
     writeJSON err
     res <- getResponse
     finishWith res
+
+created :: (ToJSON a) => ByteString -> a -> Snap ()
+created loc msg = do
+    modifyResponse $ setResponseCode 201
+    modifyResponse $ setHeader "Location" loc
+    writeJSON msg
 
 intErr :: SomeException -> Snap ()
 intErr ex = do

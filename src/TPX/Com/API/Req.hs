@@ -1,6 +1,7 @@
 module TPX.Com.API.Req (
     ValidateJSON(..),
-    getBoundedJSON'
+    getBoundedJSON',
+    getJSON'
     ) where
 
 
@@ -25,6 +26,13 @@ class ValidateJSON r where
 getBoundedJSON' :: (MonadSnap m, FromJSON a) => Int64 -> m (Either Text a)
 getBoundedJSON' s = do
     v <- getBoundedJSON s
+    return $ case v of
+        Left l  -> Left $ toText l
+        Right r -> Right r
+
+getJSON' :: (MonadSnap m, FromJSON a) => m (Either Text a)
+getJSON' = do
+    v <- getJSON
     return $ case v of
         Left l  -> Left $ toText l
         Right r -> Right r
