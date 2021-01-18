@@ -1,4 +1,4 @@
-module TPX.Com.API.Resource.CommonError (
+module TPX.Com.API.Resource (
     ErrorN(..)
     ) where
 

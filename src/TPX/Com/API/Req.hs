@@ -1,27 +1,27 @@
 module TPX.Com.API.Req (
     ValidateJSON(..),
     getBoundedJSON',
-    getJSON'
+    getJSON',
     ) where
 
 
 import              Data.Aeson
 import              Snap.Core
 import              Snap.Extras.JSON
-import qualified    TPX.Com.API.Resource.CommonError        as  RC
+import qualified    TPX.Com.API.Resource                    as  R
 
 
 class ValidateJSON r where
-    validateJSON :: Either Text r -> Snap (Either RC.ErrorN r)
+    validateJSON :: Either Text r -> Snap (Either R.ErrorN r)
     validateJSON (Right r)  = validateJSONOk r
     validateJSON (Left err) = validateJSONErr err
     
-    validateJSONOk :: r -> Snap (Either RC.ErrorN r)
+    validateJSONOk :: r -> Snap (Either R.ErrorN r)
     validateJSONOk r = return $ Right r
     
-    validateJSONErr :: Text -> Snap (Either RC.ErrorN r)
-    validateJSONErr err = return $ Left RC.ErrorN {
-        RC.errorNDebug = err}
+    validateJSONErr :: Text -> Snap (Either R.ErrorN r)
+    validateJSONErr err = return $ Left R.ErrorN {
+        R.errorNDebug = err}
 
 getBoundedJSON' :: (MonadSnap m, FromJSON a) => Int64 -> m (Either Text a)
 getBoundedJSON' s = do

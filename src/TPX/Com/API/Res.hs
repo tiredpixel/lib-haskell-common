@@ -6,7 +6,7 @@ module TPX.Com.API.Res (
     noContent,
     notFound,
     run,
-    runValidate
+    runValidate,
     ) where
 
 
@@ -14,10 +14,10 @@ import              Data.Aeson.Types                        (ToJSON)
 import              Snap.Core
 import              Snap.Extras.JSON
 import qualified    System.Posix.Signals                    as  Sig
-import qualified    TPX.Com.API.Resource.CommonError        as  RC
+import qualified    TPX.Com.API.Resource                    as  R
 
 
-badReq :: RC.ErrorN -> Snap ()
+badReq :: R.ErrorN -> Snap ()
 badReq err = do
     modifyResponse $ setResponseCode 400
     writeJSON err
@@ -56,7 +56,7 @@ run f e = do
         Just r  -> return $ Just r
         Nothing -> f >> return Nothing
 
-runValidate :: Either RC.ErrorN a -> Snap (Maybe a)
+runValidate :: Either R.ErrorN a -> Snap (Maybe a)
 runValidate e = case e of
     Right r  -> return $ Just r
     Left err -> f err >> return Nothing

@@ -3,13 +3,13 @@ module TPX.Com.Net (
     jsonNDReq,
     makeReq,
     makeRes,
-    openConn
+    openConn,
     ) where
 
 
 import              Network.HTTP.Conduit
 import              Network.HTTP.Types
-import              Network.URI
+import              Network.URI                             hiding (path)
 
 
 type Conn = Manager

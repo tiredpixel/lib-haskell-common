@@ -9,7 +9,7 @@ module TPX.Com.API.Test (
     logRes,
     postJSON,
     shouldContainSubseq,
-    testResources
+    testResources,
     ) where
 
 
