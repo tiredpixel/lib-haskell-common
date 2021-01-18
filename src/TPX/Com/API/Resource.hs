@@ -1,5 +1,5 @@
 module TPX.Com.API.Resource (
-    ErrorN(..)
+    ErrorN(..),
     ) where
 
 

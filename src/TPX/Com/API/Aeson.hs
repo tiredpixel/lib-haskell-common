@@ -1,5 +1,5 @@
 module TPX.Com.API.Aeson (
-    mergeObject
+    mergeObject,
     ) where
 
 
