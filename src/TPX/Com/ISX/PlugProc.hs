@@ -25,9 +25,12 @@ data PlugProcI = PlugProcI {
 instance FromJSON PlugProcI where
     parseJSON = withObject "plug_proc_i" $ \j -> do
         fMeta <- j .: "meta"
-        plugProcIMetaURL    <- fMeta .: "url"
-        plugProcIMetaStatus <- fMeta .:? "status"
-        plugProcIMetaConfig <- fMeta .:? "config"
+        plugProcIMetaURL      <- fMeta .: "url"
+        plugProcIMetaMethod   <- fMeta .: "method"
+        plugProcIMetaStatus   <- fMeta .:? "status"
+        plugProcIMetaDuration <- fMeta .:? "duration"
+        plugProcIMetaErr      <- fMeta .:? "err"
+        plugProcIMetaConfig   <- fMeta .:? "config"
         let plugProcIMeta = PlugProcIMeta{..}
         plugProcIHeader <- j .: "header"
         fBody <- j .: "body"
@@ -44,15 +47,21 @@ type PlugProcIBody = ByteString
 type PlugProcIHeader = Map Text Text
 
 data PlugProcIMeta = PlugProcIMeta {
-    plugProcIMetaURL    :: URIAbsolute,
-    plugProcIMetaStatus :: Maybe Integer,
-    plugProcIMetaConfig :: Maybe Value
+    plugProcIMetaURL      :: URIAbsolute,
+    plugProcIMetaMethod   :: Text,
+    plugProcIMetaStatus   :: Maybe Integer,
+    plugProcIMetaDuration :: Maybe Rational,
+    plugProcIMetaErr      :: Maybe Text,
+    plugProcIMetaConfig   :: Maybe Value
     } deriving (Show)
 instance ToJSON PlugProcIMeta where
     toJSON PlugProcIMeta{..} = object [
-        "url"    .= plugProcIMetaURL,
-        "status" .= plugProcIMetaStatus,
-        "config" .= plugProcIMetaConfig]
+        "url"      .= plugProcIMetaURL,
+        "method"   .= plugProcIMetaMethod,
+        "status"   .= plugProcIMetaStatus,
+        "duration" .= plugProcIMetaDuration,
+        "err"      .= plugProcIMetaErr,
+        "config"   .= plugProcIMetaConfig]
 
 data PlugProcO = PlugProcO {
     plugProcOData :: PlugProcOData,
