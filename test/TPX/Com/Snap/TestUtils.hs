@@ -1,5 +1,4 @@
-module TPX.Com.API.Test (
-    module E,
+module TPX.Com.Snap.TestUtils (
     assertElemN,
     assertNoContent,
     getLink,
@@ -13,20 +12,20 @@ module TPX.Com.API.Test (
     ) where
 
 
-import              Control.Lens                            as  E
-import              Data.Aeson                              as  E   hiding  ((.=))
-import              Data.Aeson.Lens                         as  E
-import              Data.List                               (elemIndex, isSubsequenceOf)
-import              Network.URI                             (URI)
-import              Snap.Core                               as  E   hiding  (addHeader, setContentType, setHeader)
-import              Snap.Test                               as  E
+import              Control.Lens                            hiding ((<.>))
+import              Data.Aeson
+import              Data.Aeson.Lens
+import              Network.URI
+import              Prelude                                 hiding (put)
+import              Snap.Core                               hiding (addHeader, setContentType, setHeader)
+import              Snap.Test
 import              System.Directory
-import              System.FilePath                         as  FP
-import              TPX.Com.API.Aeson                       as  E
-import              Test.Hspec                              as  E
-import qualified    Data.ByteString                         as  BS
+import              System.FilePath
+import              Test.Hspec
+import qualified    Data.ByteString                         as  B
 import qualified    Data.ByteString.Char8                   as  C8
-import qualified    Network.HTTP.Link                       as  Link
+import qualified    Data.List                               as  L
+import qualified    Network.HTTP.Link                       as  HTTP
 import qualified    Relude.Unsafe                           as  Unsafe
 
 
@@ -44,17 +43,17 @@ getLink :: HasHeaders a => a -> Maybe (ByteString, ByteString, ByteString)
 getLink res = do
     link <- decodeUtf8 <$> getHeader "Link" res
     [
-        Link.Link linkF [(Link.Rel, "first")],
-        Link.Link linkN [(Link.Rel, "next")],
-        Link.Link linkP [(Link.Rel, "prev")]
-        ] <- Link.parseLinkHeader link
+        HTTP.Link linkF [(HTTP.Rel, "first")],
+        HTTP.Link linkN [(HTTP.Rel, "next")],
+        HTTP.Link linkP [(HTTP.Rel, "prev")]
+        ] <- HTTP.parseLinkHeader link
     Just (c (linkF :: URI), c (linkN :: URI), c (linkP :: URI))
     where
         c = show
 
 linkQValue :: ByteString -> ByteString -> ByteString
-linkQValue p = BS.drop 1 .
-    snd . BS.breakSubstring "=" . snd . BS.breakSubstring p
+linkQValue p = B.drop 1 .
+    snd . B.breakSubstring "=" . snd . B.breakSubstring p
 
 logReq :: FilePath -> RequestBuilder IO () -> IO ()
 logReq tag req = do
@@ -66,8 +65,8 @@ logReq' :: FilePath -> ByteString -> IO ()
 logReq' tag req = do
     createDirectoryIfMissing True $ takeDirectory f
     let (header, body) = splitLog req
-    writeFileBS (f FP.<.> logExtH) header
-    writeFileBS (f FP.<.> logExtB) body
+    writeFileBS (f <.> logExtH) header
+    writeFileBS (f <.> logExtB) body
     where
         f = logDir </> tag
 
@@ -77,8 +76,8 @@ logRes tag res = do
     -- HACK: show res not responseToString, as that doubles body
     -- https://github.com/snapframework/snap-core/issues/233#issuecomment-258780775
     let (header, body) = splitLog $ show res
-    writeFileBS (f FP.<.> logExtH) header
-    writeFileBS (f FP.<.> logExtB) body
+    writeFileBS (f <.> logExtH) header
+    writeFileBS (f <.> logExtB) body
     where
         f = logDir </> tag
 
@@ -86,14 +85,14 @@ postJSON :: (MonadIO m, ToJSON a) => ByteString -> a -> RequestBuilder m ()
 postJSON u p = postRaw u "application/json" $ toStrict $ encode p
 
 shouldContainSubseq :: Eq a => [a] -> [a] -> Expectation
-shouldContainSubseq a b = (b `isSubsequenceOf` a) `shouldBe` True
+shouldContainSubseq a b = (b `L.isSubsequenceOf` a) `shouldBe` True
 
 testResources :: Eq t => Response -> [t] ->
     (Value -> Maybe t) -> (t -> Value -> IO ()) -> [Int] -> IO ()
 testResources res rIds h t es = do
     b <- getResponseBody res
     let rIdsB = catMaybes $ h <$> b ^.. values
-    catMaybes (flip elemIndex rIds <$> rIdsB) `shouldBe` es
+    catMaybes (flip L.elemIndex rIds <$> rIdsB) `shouldBe` es
     for_ (zip [0..] es) $ \(i,j) -> t (rIds Unsafe.!! j) (b ^?! nth i)
 
 
