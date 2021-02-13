@@ -18,11 +18,11 @@ module TPX.Com.Snap.CoreUtils (
     ) where
 
 
-import              Data.Aeson
-import              Snap.Core
-import              Snap.Extras.JSON
-import              System.Posix
-import qualified    Data.HashMap.Strict                     as  HM
+import           Data.Aeson
+import           Snap.Core
+import           Snap.Extras.JSON
+import           System.Posix
+import qualified Data.HashMap.Strict as HM
 
 
 newtype ErrorC = ErrorC { errorCDebug :: Text
