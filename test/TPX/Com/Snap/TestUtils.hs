@@ -17,6 +17,7 @@ module TPX.Com.Snap.TestUtils (
     shouldBe,
     shouldContain,
     shouldMeasure,
+    shouldNotBe,
     shouldSatisfy,
     ) where
 
@@ -137,6 +138,12 @@ shouldMeasure a l = if length a == l
     then setPass
     else setFail $ "|" <> show a <> "| /= " <> show l
 infix 1 `shouldMeasure`
+
+shouldNotBe :: (Eq a, Show a) => a -> a -> Hs.SnapHspecM b ()
+shouldNotBe a e = if a /= e
+    then setPass
+    else setFail $ show a <> " == " <> show e
+infix 1 `shouldNotBe`
 
 shouldSatisfy :: Show a => a -> (a -> Bool) -> Hs.SnapHspecM b ()
 shouldSatisfy a p = if p a
