@@ -19,6 +19,7 @@ module TPX.Com.Snap.TestUtils (
     shouldMeasure,
     shouldNotBe,
     shouldSatisfy,
+    splitHeaderBody,
     ) where
 
 
@@ -86,7 +87,7 @@ logReq tag req = liftIO $ do
 logReq' :: MonadIO m => FilePath -> ByteString -> m ()
 logReq' tag req = liftIO $ do
     createDirectoryIfMissing True $ takeDirectory f
-    let (header, body) = splitLog req
+    let (header, body) = splitHeaderBody req
     writeFileBS (f <.> logExtH) header
     writeFileBS (f <.> logExtB) body
     where
@@ -97,7 +98,7 @@ logRes tag res = liftIO $ do
     createDirectoryIfMissing True $ takeDirectory f
     -- HACK: show res not responseToString, as that doubles body
     -- https://github.com/snapframework/snap-core/issues/233#issuecomment-258780775
-    let (header, body) = splitLog $ show res
+    let (header, body) = splitHeaderBody $ show res
     writeFileBS (f <.> logExtH) header
     writeFileBS (f <.> logExtB) body
     where
@@ -151,6 +152,13 @@ shouldSatisfy a p = if p a
     else setFail $ show a <> " unsatisfied"
 infix 1 `shouldSatisfy`
 
+splitHeaderBody :: ByteString -> (ByteString, ByteString)
+splitHeaderBody log = (header, body')
+    where
+        sep = "\r\n\r\n"
+        (header, body) = C8.breakSubstring sep log
+        body' = fromMaybe "" $ C8.stripPrefix sep body
+
 
 logDir :: FilePath
 logDir = "test/log"
@@ -166,13 +174,6 @@ setFail = Hs.setResult . Hs.Failure Nothing . Hs.Reason . toString
 
 setPass :: Hs.SnapHspecM b ()
 setPass = Hs.setResult Hs.Success
-
-splitLog :: ByteString -> (ByteString, ByteString)
-splitLog log = (header, body')
-    where
-        sep = "\r\n\r\n"
-        (header, body) = C8.breakSubstring sep log
-        body' = fromMaybe "" $ C8.stripPrefix sep body
 
 takeWhileEnd :: (Char -> Bool) -> ByteString -> ByteString
 takeWhileEnd p = C8.reverse . C8.takeWhile p . C8.reverse
