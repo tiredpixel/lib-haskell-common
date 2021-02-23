@@ -137,7 +137,8 @@ infix 1 `shouldContain`
 shouldMeasure :: (Foldable t, Show (t a)) => t a -> Int -> Hs.SnapHspecM b ()
 shouldMeasure a l = if length a == l
     then setPass
-    else setFail $ "|" <> show a <> "| /= " <> show l
+    else setFail $
+        "|" <> show a <> "| = " <> show (length a) <> " /= " <> show l
 infix 1 `shouldMeasure`
 
 shouldNotBe :: (Eq a, Show a) => a -> a -> Hs.SnapHspecM b ()
