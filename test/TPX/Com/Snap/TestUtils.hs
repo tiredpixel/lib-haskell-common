@@ -16,6 +16,7 @@ module TPX.Com.Snap.TestUtils (
     runRequest,
     shouldBe,
     shouldBeList,
+    shouldBeSet,
     shouldContain,
     shouldMeasure,
     shouldNotBe,
@@ -38,6 +39,7 @@ import qualified Data.ByteString.Char8  as C8
 import qualified Data.HashMap.Strict    as HM
 import qualified Data.List              as L
 import qualified Data.Map               as M
+import qualified Data.Set               as S
 import qualified Data.Text              as T
 import qualified Network.HTTP.Link      as HTTP
 import qualified Snap.Test              as ST
@@ -135,6 +137,13 @@ shouldBeList a e = if a == e
     then setPass
     else setFail $ "< " <> show (a L.\\ e) <> "\n" <> "> " <> show (e L.\\ a)
 infix 1 `shouldBeList`
+
+shouldBeSet :: (Show a, Ord a) => Set a -> Set a -> Hs.SnapHspecM b ()
+shouldBeSet a e = if a == e
+    then setPass
+    else setFail $ "< " <> show (S.toList (a S.\\ e)) <> "\n" <>
+        "> " <> show (S.toList (e S.\\ a))
+infix 1 `shouldBeSet`
 
 shouldContain :: Text -> Text -> Hs.SnapHspecM b ()
 shouldContain s e = if e `T.isInfixOf` s
