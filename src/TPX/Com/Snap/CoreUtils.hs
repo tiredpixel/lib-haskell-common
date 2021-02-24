@@ -15,14 +15,16 @@ module TPX.Com.Snap.CoreUtils (
     notFound,
     run,
     runValidate,
+    snapCfg,
     ) where
 
 
 import           Data.Aeson
 import           Snap.Core
 import           Snap.Extras.JSON
+import           Snap.Http.Server.Config
 import           System.Posix
-import qualified Data.HashMap.Strict as HM
+import qualified Data.HashMap.Strict     as HM
 
 
 newtype ErrorC = ErrorC { errorCDebug :: Text
@@ -104,3 +106,9 @@ runValidate e = case e of
     Left err -> f err >> return Nothing
     where
         f = badReq
+
+snapCfg :: MonadSnap m => Config m a
+snapCfg =
+    setAccessLog (ConfigFileLog "-") $
+    setErrorLog (ConfigFileLog "-") $
+    setErrorHandler intErr' defaultConfig
