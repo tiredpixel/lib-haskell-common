@@ -8,8 +8,8 @@ module TPX.Com.URI (
     ) where
 
 
-import              Data.Aeson
-import qualified    Network.URI                             as  URI
+import           Data.Aeson
+import qualified Network.URI as URI
 
 
 newtype URIAbsolute = URIAbsolute { unURIAbsolute :: URI.URI

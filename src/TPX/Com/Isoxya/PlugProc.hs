@@ -1,7 +1,7 @@
 {-# LANGUAGE RecordWildCards #-}
 
 
-module TPX.Com.ISX.PlugProc (
+module TPX.Com.Isoxya.PlugProc (
     PlugProcI(..),
     PlugProcIBody,
     PlugProcIHeader,
@@ -12,9 +12,9 @@ module TPX.Com.ISX.PlugProc (
     ) where
 
 
-import              Data.Aeson
-import              TPX.Com.URI
-import qualified    Data.ByteString.Base64                  as  B64
+import           Data.Aeson
+import           TPX.Com.URI
+import qualified Data.ByteString.Base64 as B64
 
 
 data PlugProcI = PlugProcI {

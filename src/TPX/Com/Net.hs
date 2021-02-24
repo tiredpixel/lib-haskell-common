@@ -1,15 +1,15 @@
 module TPX.Com.Net (
     Conn,
     jsonNDReq,
-    makeReq,
+    makeReq ,
     makeRes,
     openConn,
     ) where
 
 
-import              Network.HTTP.Conduit
-import              Network.HTTP.Types
-import              Network.URI                             hiding (path)
+import Network.HTTP.Conduit
+import Network.HTTP.Types
+import Network.URI          hiding (path)
 
 
 type Conn = Manager
@@ -22,7 +22,7 @@ jsonNDReq req = req {
 makeReq :: ByteString -> URI -> LByteString -> Request
 makeReq verb url body = setRequest verb body $ parseRequest_ $ show' url
 
-makeRes :: Request -> Conn -> IO (Response LByteString)
+makeRes :: MonadIO m => Request -> Conn -> m (Response LByteString)
 makeRes = httpLbs
 
 openConn :: IO Manager

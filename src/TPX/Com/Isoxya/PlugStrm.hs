@@ -1,14 +1,14 @@
 {-# LANGUAGE RecordWildCards #-}
 
 
-module TPX.Com.ISX.PlugStrm (
+module TPX.Com.Isoxya.PlugStrm (
     PlugStrm(..),
     ) where
 
 
-import              Data.Aeson
-import              Data.Time.Clock                         (UTCTime)
-import              TPX.Com.URI
+import Data.Aeson
+import Data.Time.Clock
+import TPX.Com.URI
 
 
 data PlugStrm = PlugStrm {
