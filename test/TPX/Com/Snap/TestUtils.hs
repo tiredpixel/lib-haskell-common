@@ -1,5 +1,6 @@
 module TPX.Com.Snap.TestUtils (
     addHeaderAuth,
+    array,
     defaultPL1,
     defaultPL2,
     emptyO,
@@ -16,12 +17,14 @@ module TPX.Com.Snap.TestUtils (
     runRequest,
     shouldBe,
     shouldBeList,
+    shouldBeListJSON,
     shouldBeSet,
     shouldContain,
     shouldMeasure,
     shouldNotBe,
     shouldSatisfy,
-    splitHeaderBody,
+    splitHeaderBody ,
+    splitHeaderBody',
     ) where
 
 
@@ -41,6 +44,7 @@ import qualified Data.List              as L
 import qualified Data.Map               as M
 import qualified Data.Set               as S
 import qualified Data.Text              as T
+import qualified Data.Vector            as V
 import qualified Network.HTTP.Link      as HTTP
 import qualified Snap.Test              as ST
 import qualified Test.Hspec.Core.Spec   as Hs
@@ -49,6 +53,9 @@ import qualified Test.Hspec.Snap        as Hs
 
 addHeaderAuth :: Monad m => ByteString -> RequestBuilder m ()
 addHeaderAuth b = addHeader "Authorization" $ "Basic " <> B64.encode b
+
+array :: [Value] -> Value
+array = Array . V.fromList
 
 defaultPL1 :: Params
 defaultPL1 = M.fromList [("_lim", ["1"])]
@@ -138,6 +145,14 @@ shouldBeList a e = if a == e
     else setFail $ "< " <> show (a L.\\ e) <> "\n" <> "> " <> show (e L.\\ a)
 infix 1 `shouldBeList`
 
+shouldBeListJSON :: (Eq a, ToJSON a) => [a] -> [a] -> Hs.SnapHspecM b ()
+shouldBeListJSON a e = if a == e
+    then setPass
+    else setFail $ "< " <> show' (a L.\\ e) <> "\n" <> "> " <> show' (e L.\\ a)
+    where
+        show' = decodeUtf8 . encode
+infix 1 `shouldBeListJSON`
+
 shouldBeSet :: (Show a, Ord a) => Set a -> Set a -> Hs.SnapHspecM b ()
 shouldBeSet a e = if a == e
     then setPass
@@ -174,6 +189,13 @@ splitHeaderBody :: ByteString -> (ByteString, ByteString)
 splitHeaderBody log = (header, body')
     where
         sep = "\r\n\r\n"
+        (header, body) = C8.breakSubstring sep log
+        body' = fromMaybe "" $ C8.stripPrefix sep body
+
+splitHeaderBody' :: ByteString -> (ByteString, ByteString)
+splitHeaderBody' log = (header, body')
+    where
+        sep = "\n\n"
         (header, body) = C8.breakSubstring sep log
         body' = fromMaybe "" $ C8.stripPrefix sep body
 
