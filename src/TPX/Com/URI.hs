@@ -5,11 +5,17 @@ module TPX.Com.URI (
     URIAbsolute(..),
     URIReference(..),
     URIRelative(..),
+    reqURIPage,
+    reqURISite,
     ) where
 
 
 import           Data.Aeson
-import qualified Network.URI as URI
+import qualified Data.ByteString.Char8 as C8
+import qualified Data.Char             as C
+import qualified Network.HTTP.Conduit  as HTTP
+import qualified Network.URI           as URI
+import qualified Text.Regex            as R
 
 
 newtype URIAbsolute = URIAbsolute { unURIAbsolute :: URI.URI
@@ -38,6 +44,34 @@ instance FromJSON URIRelative where
         URI.parseRelativeReference . toString
 instance ToJSON URIRelative where
     toJSON = toJSON . unURIRelative
+
+reqURIPage :: HTTP.Request -> URI.URI
+reqURIPage req = URI.URI {
+    URI.uriScheme    = "",
+    URI.uriAuthority = Nothing,
+    URI.uriPath      = unslash $ C8.unpack $ HTTP.path req,
+    URI.uriQuery     = C8.unpack $ HTTP.queryString req,
+    URI.uriFragment  = ""}
+
+reqURISite :: HTTP.Request -> URI.URI
+reqURISite req = URI.URI {
+    URI.uriScheme    = scheme,
+    URI.uriAuthority = Just authority,
+    URI.uriPath      = "",
+    URI.uriQuery     = "",
+    URI.uriFragment  = ""}
+    where
+        scheme = if HTTP.secure req
+            then "https:"
+            else "http:"
+        authority = URI.URIAuth {
+            URI.uriUserInfo = "",
+            URI.uriRegName  = map C.toLower $ C8.unpack $ HTTP.host req,
+            URI.uriPort     = ":" ++ show (HTTP.port req)}
+
+
+unslash :: String -> String
+unslash url = R.subRegex (R.mkRegex "/+") url "/"
 
 
 -- no FromJSON URI.URI instance! be more specific!
