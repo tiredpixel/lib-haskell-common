@@ -13,8 +13,7 @@ module TPX.Com.Snap.CoreUtils (
     getBoundedJSON',
     getJSON',
     getJSONB,
-    intErr ,
-    intErr',
+    intErr,
     mergeObject,
     noContent,
     notFound,
@@ -35,7 +34,6 @@ import           Snap.Core
 import           Snap.Extras.CoreUtils   (jsonResponse)
 import           Snap.Extras.JSON
 import           Snap.Http.Server.Config
-import           System.Posix            hiding (Handler)
 import           TPX.Com.Cursor
 import qualified Data.ByteString.Char8   as C8
 import qualified Data.HashMap.Strict     as HM
@@ -119,11 +117,6 @@ intErr ex = do
     logError $ encodeUtf8 (show ex :: Text)
     modifyResponse $ setResponseCode 500
 
-intErr' :: MonadSnap m => SomeException -> m ()
-intErr' ex = do
-    intErr ex
-    liftIO $ raiseSignal sigINT
-
 mergeObject :: Value -> Value -> Value
 mergeObject (Object a) (Object b) = Object $ HM.unionWith mergeObject a b
 mergeObject _ b = b
@@ -172,8 +165,8 @@ runValidate e = case e of
 snapCfg :: MonadSnap m => Config m a
 snapCfg =
     setAccessLog (ConfigFileLog "-") $
-    setErrorLog (ConfigFileLog "-") $
-    setErrorHandler intErr' defaultConfig
+    setErrorLog (ConfigFileLog "-")
+    defaultConfig
 
 setResLink :: MonadSnap m => ByteString -> (a -> ByteString) -> [a] -> m ()
 setResLink url href es =
