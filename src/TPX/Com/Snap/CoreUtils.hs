@@ -22,11 +22,13 @@ module TPX.Com.Snap.CoreUtils (
     runValidate,
     setResLink,
     snapCfg,
+    snapWait,
     unauthorized,
     writeJSON',
     ) where
 
 
+import           Control.Concurrent      (ThreadId, killThread)
 import           Data.Aeson
 import           Data.Time.Clock
 import           Safe
@@ -34,6 +36,8 @@ import           Snap.Core
 import           Snap.Extras.CoreUtils   (jsonResponse)
 import           Snap.Extras.JSON
 import           Snap.Http.Server.Config
+import           System.IO
+import           System.Posix.Signals
 import           TPX.Com.Cursor
 import qualified Data.ByteString.Char8   as C8
 import qualified Data.HashMap.Strict     as HM
@@ -167,6 +171,18 @@ snapCfg =
     setAccessLog (ConfigFileLog "-") $
     setErrorLog (ConfigFileLog "-")
     defaultConfig
+
+snapWait :: ThreadId -> IO ()
+snapWait tId = do
+    done <- newEmptyMVar
+    _ <- installHandler sigTERM (hTERM done) Nothing
+    takeMVar done
+    hPutStrLn stderr "Čau"
+    where
+        hTERM done = CatchOnce $ do
+            hPutStrLn stderr "Handling SIGTERM"
+            killThread tId
+            putMVar done ()
 
 setResLink :: MonadSnap m => ByteString -> (a -> ByteString) -> [a] -> m ()
 setResLink url href es =
