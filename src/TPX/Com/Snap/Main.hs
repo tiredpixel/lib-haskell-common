@@ -19,16 +19,19 @@ config =
     setErrorLog (ConfigFileLog "-")
     defaultConfig
 
-init :: IO (MVar ())
+init :: IO (MVar (Either Text Text))
 init = newEmptyMVar
 
-wait :: MVar () -> ThreadId -> IO ()
+wait :: MVar (Either Text Text) -> ThreadId -> IO ()
 wait done tId = do
     _ <- installHandler sigTERM sigTERMH Nothing
-    takeMVar done
+    doneM <- takeMVar done
+    case doneM of
+        Left  msg -> hPutStrLn stderr (toString msg) >> exitFailure
+        Right msg -> hPutStrLn stderr (toString msg)
     hPutStrLn stderr "Čau"
     where
         sigTERMH = CatchOnce $ do
             hPutStrLn stderr "Handling SIGTERM"
             killThread tId
-            putMVar done ()
+            putMVar done $ Right "Terminated"
