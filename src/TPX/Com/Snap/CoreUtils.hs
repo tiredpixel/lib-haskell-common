@@ -13,6 +13,7 @@ module TPX.Com.Snap.CoreUtils (
     getBoundedJSON',
     getJSON',
     getJSONB,
+    init,
     intErr,
     mergeObject,
     noContent,
@@ -22,8 +23,8 @@ module TPX.Com.Snap.CoreUtils (
     runValidate,
     setResLink,
     snapCfg,
-    snapWait,
     unauthorized,
+    wait,
     writeJSON',
     ) where
 
@@ -31,6 +32,7 @@ module TPX.Com.Snap.CoreUtils (
 import           Control.Concurrent      (ThreadId, killThread)
 import           Data.Aeson
 import           Data.Time.Clock
+import           Prelude                 hiding (init)
 import           Safe
 import           Snap.Core
 import           Snap.Extras.CoreUtils   (jsonResponse)
@@ -116,6 +118,9 @@ getJSONB body = do
             Error e   -> Left $ toText e
         Nothing -> Left "Can't find JSON data in POST body"
 
+init :: IO (MVar ())
+init = newEmptyMVar
+
 intErr :: MonadSnap m => SomeException -> m ()
 intErr ex = do
     logError $ encodeUtf8 (show ex :: Text)
@@ -172,18 +177,6 @@ snapCfg =
     setErrorLog (ConfigFileLog "-")
     defaultConfig
 
-snapWait :: ThreadId -> IO ()
-snapWait tId = do
-    done <- newEmptyMVar
-    _ <- installHandler sigTERM (hTERM done) Nothing
-    takeMVar done
-    hPutStrLn stderr "Čau"
-    where
-        hTERM done = CatchOnce $ do
-            hPutStrLn stderr "Handling SIGTERM"
-            killThread tId
-            putMVar done ()
-
 setResLink :: MonadSnap m => ByteString -> (a -> ByteString) -> [a] -> m ()
 setResLink url href es =
     modifyResponse $ setHeader "Link" $ calcLink links
@@ -199,6 +192,17 @@ unauthorized = do
     modifyResponse $ setResponseCode 401
     modifyResponse $ setHeader "WWW-Authenticate" "Basic"
     getResponse >>= finishWith
+
+wait :: MVar () -> ThreadId -> IO ()
+wait done tId = do
+    _ <- installHandler sigTERM sigTERMH Nothing
+    takeMVar done
+    hPutStrLn stderr "Čau"
+    where
+        sigTERMH = CatchOnce $ do
+            hPutStrLn stderr "Handling SIGTERM"
+            killThread tId
+            putMVar done ()
 
 writeJSON' :: MonadSnap m => LByteString -> m ()
 writeJSON' a = do
