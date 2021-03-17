@@ -1,6 +1,6 @@
 module TPX.Com.UUID (
     fromByteStringNil,
-    generateUUID,
+    genUUID,
     ) where
 
 
@@ -11,5 +11,5 @@ import Data.UUID.V4
 fromByteStringNil :: ByteString -> UUID
 fromByteStringNil = fromMaybe nil . fromASCIIBytes
 
-generateUUID :: MonadIO m => m UUID
-generateUUID = liftIO nextRandom
+genUUID :: MonadIO m => m UUID
+genUUID = liftIO nextRandom
