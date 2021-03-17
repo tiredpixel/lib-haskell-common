@@ -8,7 +8,6 @@ module TPX.Com.SQLite.Conn (
 
 
 import           Control.Exception      (bracket)
-import           System.Environment     (lookupEnv)
 import qualified Database.SQLite.Simple as S
 
 
