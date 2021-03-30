@@ -16,7 +16,8 @@ import System.Posix.Signals
 config :: MonadSnap m => Config m a
 config =
     setAccessLog (ConfigFileLog "-") $
-    setErrorLog (ConfigFileLog "-")
+    setErrorLog (ConfigFileLog "-") $
+    setErrorHandler intErr'
     defaultConfig
 
 init :: IO (MVar (Either Text Text))
@@ -35,3 +36,10 @@ wait done tId = do
             hPutStrLn stderr "Handling SIGTERM"
             killThread tId
             putMVar done $ Right "Terminated"
+
+
+intErr' :: MonadSnap m => SomeException -> m ()
+intErr' ex = do
+    logError $ encodeUtf8 (show ex :: Text)
+    modifyResponse $ setResponseCode 500
+    liftIO $ raiseSignal sigINT
