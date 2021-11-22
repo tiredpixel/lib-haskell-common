@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
 
-module TPX.Com.SQLite.Ext.URI () where
+module TiredPixel.Common.SQLite.Ext.URI () where
 
 
 import Database.SQLite.Simple.FromField

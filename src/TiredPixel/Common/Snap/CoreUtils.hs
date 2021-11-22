@@ -1,7 +1,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
 
-module TPX.Com.Snap.CoreUtils (
+module TiredPixel.Common.Snap.CoreUtils (
     ErrorC(..),
     RouteHref(..),
     RouteId(..),
@@ -30,12 +30,12 @@ import           Data.Aeson
 import           Data.Time.Clock
 import           Safe
 import           Snap.Core
-import           Snap.Extras.CoreUtils (jsonResponse)
+import           Snap.Extras.CoreUtils    (jsonResponse)
 import           Snap.Extras.JSON
-import           TPX.Com.Cursor
-import qualified Data.ByteString.Char8 as C8
-import qualified Data.HashMap.Strict   as HM
-import qualified Data.Time.Format      as Time
+import           TiredPixel.Common.Cursor
+import qualified Data.ByteString.Char8    as C8
+import qualified Data.HashMap.Strict      as HM
+import qualified Data.Time.Format         as Time
 
 
 newtype ErrorC = ErrorC { errorCDebug :: Text

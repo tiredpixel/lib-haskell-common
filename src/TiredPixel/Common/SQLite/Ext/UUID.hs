@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
 
-module TPX.Com.SQLite.Ext.UUID () where
+module TiredPixel.Common.SQLite.Ext.UUID () where
 
 
 import Data.UUID

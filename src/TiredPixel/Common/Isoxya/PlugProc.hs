@@ -1,7 +1,7 @@
 {-# LANGUAGE RecordWildCards #-}
 
 
-module TPX.Com.Isoxya.PlugProc (
+module TiredPixel.Common.Isoxya.PlugProc (
     PlugProcI(..),
     PlugProcIBody,
     PlugProcIHeader,
@@ -13,7 +13,7 @@ module TPX.Com.Isoxya.PlugProc (
 
 
 import           Data.Aeson
-import           TPX.Com.URI
+import           TiredPixel.Common.URI
 import qualified Data.ByteString.Base64 as B64
 
 

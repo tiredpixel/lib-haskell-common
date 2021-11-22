@@ -1,4 +1,4 @@
-module TPX.Com.UUID (
+module TiredPixel.Common.UUID (
     fromByteStringNil,
     genUUID,
     ) where

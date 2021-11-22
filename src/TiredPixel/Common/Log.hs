@@ -1,7 +1,7 @@
 {-# LANGUAGE RankNTypes #-}
 
 
-module TPX.Com.Log (
+module TiredPixel.Common.Log (
     L.Logger,
     withLog,
     trace,

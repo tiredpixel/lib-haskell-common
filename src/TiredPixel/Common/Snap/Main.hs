@@ -1,4 +1,4 @@
-module TPX.Com.Snap.Main (
+module TiredPixel.Common.Snap.Main (
     config,
     init,
     wait,

@@ -1,11 +1,11 @@
-module TPX.Com.SQLite.Meta (
+module TiredPixel.Common.SQLite.Meta (
     migrate,
     ) where
 
 
 import           Database.SQLite.Simple.Types
-import           TPX.Com.SQLite.Query
-import qualified TPX.Com.SQLite.Conn          as D
+import           TiredPixel.Common.SQLite.Query
+import qualified TiredPixel.Common.SQLite.Conn  as D
 
 
 migrate :: [(Integer, D.Conn -> IO ())] -> D.Conn -> IO ()

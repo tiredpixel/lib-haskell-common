@@ -1,4 +1,4 @@
-module TPX.Com.SQLite.Query (
+module TiredPixel.Common.SQLite.Query (
     S.Only,
     executeManyW,
     executeW ,
@@ -11,8 +11,8 @@ module TPX.Com.SQLite.Query (
     ) where
 
 
-import qualified Database.SQLite.Simple as S
-import qualified TPX.Com.SQLite.Conn    as D
+import qualified Database.SQLite.Simple        as S
+import qualified TiredPixel.Common.SQLite.Conn as D
 
 
 executeManyW :: (MonadIO m, S.ToRow q) => S.Query -> [q] -> D.Conn -> m ()

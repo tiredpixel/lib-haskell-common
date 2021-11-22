@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
 
-module TPX.Com.URI (
+module TiredPixel.Common.URI (
     URIAbsolute(..),
     URIReference(..),
     URIRelative(..),

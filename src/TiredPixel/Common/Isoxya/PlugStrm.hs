@@ -1,14 +1,14 @@
 {-# LANGUAGE RecordWildCards #-}
 
 
-module TPX.Com.Isoxya.PlugStrm (
+module TiredPixel.Common.Isoxya.PlugStrm (
     PlugStrm(..),
     ) where
 
 
 import Data.Aeson
 import Data.Time.Clock
-import TPX.Com.URI
+import TiredPixel.Common.URI
 
 
 data PlugStrm = PlugStrm {

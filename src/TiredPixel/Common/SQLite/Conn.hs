@@ -1,4 +1,4 @@
-module TPX.Com.SQLite.Conn (
+module TiredPixel.Common.SQLite.Conn (
     Conn(..),
     closeConn,
     openConnS,

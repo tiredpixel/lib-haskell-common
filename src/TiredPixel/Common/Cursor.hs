@@ -1,4 +1,4 @@
-module TPX.Com.Cursor (
+module TiredPixel.Common.Cursor (
     Cursor(..),
     curse,
     ) where

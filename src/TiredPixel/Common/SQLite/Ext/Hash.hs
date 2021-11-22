@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
 
-module TPX.Com.SQLite.Ext.Hash () where
+module TiredPixel.Common.SQLite.Ext.Hash () where
 
 
 import           Crypto.Hash

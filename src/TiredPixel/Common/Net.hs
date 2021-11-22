@@ -1,4 +1,4 @@
-module TPX.Com.Net (
+module TiredPixel.Common.Net (
     Conn,
     extractResRobots,
     jsonNDReq,
