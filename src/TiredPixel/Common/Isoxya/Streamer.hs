@@ -14,13 +14,13 @@ import TiredPixel.Common.URI
 data Streamer = Streamer {
     streamerCrawlBegan    :: UTCTime,
     streamerCrawlHref     :: Text,
-    streamerData          :: Value
+    streamerData          :: Value,
     streamerProcessorHref :: Text,
     streamerProcessorTag  :: Text,
     streamerRetrieved     :: UTCTime,
     streamerSiteHref      :: Text,
     streamerSiteURL       :: URIAbsolute,
-    streamerURL           :: URIAbsolute,
+    streamerURL           :: URIAbsolute
     } deriving (Show)
 instance FromJSON Streamer where
     parseJSON = withObject "streamer" $ \j -> do
