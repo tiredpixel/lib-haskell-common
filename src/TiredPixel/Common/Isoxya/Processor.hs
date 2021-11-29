@@ -18,29 +18,29 @@ import qualified Data.ByteString.Base64 as B64
 
 
 data ProcessorI = ProcessorI {
-    processorIBody   :: ProcessorIBody,
+    processorIMeta   :: ProcessorIMeta,
     processorIHeader :: ProcessorIHeader,
-    processorIMeta   :: ProcessorIMeta
+    processorIBody   :: ProcessorIBody
     } deriving (Show)
 instance FromJSON ProcessorI where
     parseJSON = withObject "processor_i" $ \j -> do
-        fBody                  <- j     .:  "body"
         fMeta                  <- j     .:  "meta"
-        processorIHeader       <- j     .:  "header"
+        fBody                  <- j     .:  "body"
         processorIMetaConfig   <- fMeta .:? "config"
         processorIMetaDuration <- fMeta .:? "duration"
         processorIMetaError    <- fMeta .:? "error"
         processorIMetaMethod   <- fMeta .:  "method"
         processorIMetaStatus   <- fMeta .:? "status"
         processorIMetaURL      <- fMeta .:  "url"
+        processorIHeader       <- j     .:  "header"
         let processorIBody = B64.decodeLenient $ encodeUtf8 (fBody :: Text)
         let processorIMeta = ProcessorIMeta{..}
         return ProcessorI{..}
 instance ToJSON ProcessorI where
     toJSON ProcessorI{..} = object [
-        "body"   .= (decodeUtf8 (B64.encode processorIBody) :: Text),
+        "meta"   .= processorIMeta,
         "header" .= processorIHeader,
-        "meta"   .= processorIMeta]
+        "body"   .= (decodeUtf8 (B64.encode processorIBody) :: Text)]
 
 type ProcessorIBody = ByteString
 
