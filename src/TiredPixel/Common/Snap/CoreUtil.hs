@@ -1,7 +1,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 
 
-module TiredPixel.Common.Snap.CoreUtils (
+module TiredPixel.Common.Snap.CoreUtil (
     ErrorC(..),
     RouteHref(..),
     RouteId(..),

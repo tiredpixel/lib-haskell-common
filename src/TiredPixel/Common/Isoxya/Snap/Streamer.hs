@@ -5,7 +5,7 @@ module TiredPixel.Common.Isoxya.Snap.Streamer () where
 
 
 import TiredPixel.Common.Isoxya.Streamer
-import TiredPixel.Common.Snap.CoreUtils
+import TiredPixel.Common.Snap.CoreUtil
 
 
 instance ValidateJSON Streamer

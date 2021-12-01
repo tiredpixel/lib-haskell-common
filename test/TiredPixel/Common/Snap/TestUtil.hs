@@ -1,4 +1,4 @@
-module TiredPixel.Common.Snap.TestUtils (
+module TiredPixel.Common.Snap.TestUtil (
     addHeaderAuth,
     array,
     defaultPL1,
