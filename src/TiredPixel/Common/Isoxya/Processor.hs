@@ -13,6 +13,7 @@ module TiredPixel.Common.Isoxya.Processor (
 
 
 import           Data.Aeson
+import           Data.Fixed             (Pico)
 import           TiredPixel.Common.URI
 import qualified Data.ByteString.Base64 as B64
 
@@ -48,7 +49,7 @@ type ProcessorIHeader = Map Text Text
 
 data ProcessorIMeta = ProcessorIMeta {
     processorIMetaConfig   :: Maybe Value,
-    processorIMetaDuration :: Maybe Integer,
+    processorIMetaDuration :: Maybe Pico,
     processorIMetaError    :: Maybe Text,
     processorIMetaMethod   :: Text,
     processorIMetaStatus   :: Maybe Integer,
