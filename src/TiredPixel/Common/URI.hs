@@ -3,8 +3,10 @@
 
 module TiredPixel.Common.URI (
     URIAbsolute(..),
+    URIPage(..),
     URIReference(..),
     URIRelative(..),
+    URISite(..),
     reqURIPage,
     reqURISite,
     ) where
@@ -27,6 +29,15 @@ instance FromJSON URIAbsolute where
 instance ToJSON URIAbsolute where
     toJSON = toJSON . unURIAbsolute
 
+newtype URIPage = URIPage { unURIPage :: URI.URI
+    } deriving (Show, Eq, Ord)
+instance FromJSON URIPage where
+    parseJSON = withText "URIPage" $
+        maybe (fail "invalid URIPage") (pure . URIPage) .
+        parsePageURI . URI.parseRelativeReference . toString
+instance ToJSON URIPage where
+    toJSON = toJSON . unURIPage
+
 newtype URIReference = URIReference { unURIReference :: URI.URI
     } deriving (Show, Eq, Ord)
 instance FromJSON URIReference where
@@ -44,6 +55,15 @@ instance FromJSON URIRelative where
         URI.parseRelativeReference . toString
 instance ToJSON URIRelative where
     toJSON = toJSON . unURIRelative
+
+newtype URISite = URISite { unURISite :: URI.URI
+    } deriving (Show, Eq, Ord)
+instance FromJSON URISite where
+    parseJSON = withText "URISite" $
+        maybe (fail "invalid URISite") (pure . URISite) .
+        parseSiteURI . URI.parseAbsoluteURI . toString
+instance ToJSON URISite where
+    toJSON = toJSON . unURISite
 
 reqURIPage :: HTTP.Request -> URI.URI
 reqURIPage req = URI.URI {
@@ -69,6 +89,16 @@ reqURISite req = URI.URI {
             URI.uriRegName  = map C.toLower $ C8.unpack $ HTTP.host req,
             URI.uriPort     = ":" ++ show (HTTP.port req)}
 
+
+parsePageURI :: Maybe URI.URI -> Maybe URI.URI
+parsePageURI url = do
+    url' <- url
+    reqURIPage <$> (HTTP.parseRequest . show) url'
+
+parseSiteURI :: Maybe URI.URI -> Maybe URI.URI
+parseSiteURI url = do
+    url' <- url
+    reqURISite <$> (HTTP.parseRequest . show) url'
 
 unslash :: String -> String
 unslash url = R.subRegex (R.mkRegex "/+") url "/"
