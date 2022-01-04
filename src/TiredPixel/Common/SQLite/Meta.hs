@@ -8,15 +8,16 @@ import           TiredPixel.Common.SQLite.Query
 import qualified TiredPixel.Common.SQLite.Conn  as D
 
 
-migrate :: [(Integer, D.Conn -> IO ())] -> D.Conn -> IO ()
-migrate migrations d = do
+migrate :: [(Integer, D.Conn -> IO ())] -> Text -> D.Conn -> IO ()
+migrate migrations schema d = do
     executeW' q0 d
     forM_ migrations (\(mId, mF) -> withTransaction d $ do
-        migrationV <- rMigrationV d
+        migrationV <- rMigrationV kMigrationV d
         if mId > migrationV
-            then mF d >> uMigrationV mId d
+            then mF d >> uMigrationV mId kMigrationV d
             else pass)
     where
+        kMigrationV = schema <> ".migration_v"
         q0 = " \
         \   /* migrate.0 */ \
         \   CREATE TABLE IF NOT EXISTS _meta ( \
@@ -26,23 +27,24 @@ migrate migrations d = do
         \ "
 
 
-rMigrationV :: D.Conn -> IO Integer
-rMigrationV d = do
-    v_ <- listToMaybe <$> queryR' q d
+rMigrationV :: Text -> D.Conn -> IO Integer
+rMigrationV k d = do
+    v_ <- listToMaybe <$> queryR q p d
     return $ fromOnly $ fromMaybe (Only vDef) v_
     where
+        vDef = 0
         q = " \
         \   /* rMigrationV */ \
-        \   SELECT CAST(v AS INTEGER) FROM _meta WHERE k = 'migration_v' \
+        \   SELECT CAST(v AS INTEGER) FROM _meta WHERE k = ? \
         \ "
-        vDef = 0
+        p = [k]
 
-uMigrationV :: Integer -> D.Conn -> IO ()
-uMigrationV mId = executeW q p
+uMigrationV :: Integer -> Text -> D.Conn -> IO ()
+uMigrationV mId k = executeW q p
     where
         q = " \
         \   /* uMigrationV */ \
-        \   INSERT INTO _meta VALUES ('migration_v', ?) \
+        \   INSERT INTO _meta VALUES (?, ?) \
         \       ON CONFLICT (k) DO UPDATE SET v = ? \
         \ "
-        p = (mId, mId)
+        p = (k, mId, mId)
