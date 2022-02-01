@@ -74,7 +74,6 @@ userAgentReq ua req = req {
     requestHeaders = ("User-Agent", ua) : requestHeaders req }
 
 
-{-# ANN  parseUrlThrow_ ("HLint: ignore Use impureThrow" :: String) #-}
 parseUrlThrow_ :: String -> Request
 parseUrlThrow_ = either throw id . parseUrlThrow
 
