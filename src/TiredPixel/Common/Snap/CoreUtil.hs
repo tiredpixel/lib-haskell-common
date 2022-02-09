@@ -103,8 +103,7 @@ getJSON' = do
 
 getJSONB :: (MonadSnap m, FromJSON a) => LByteString -> m (Either Text a)
 getJSONB body = do
-    bodyVal <- decode `fmap` return body
-    return $ case bodyVal of
+    return $ case decode body of
         Just v -> case fromJSON v of
             Success a -> Right a
             Error e   -> Left $ toText e
