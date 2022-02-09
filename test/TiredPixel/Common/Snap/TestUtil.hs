@@ -28,15 +28,8 @@ module TiredPixel.Common.Snap.TestUtil (
     ) where
 
 
-import           Data.Aeson
-import           Network.URI
-import           Prelude                hiding (put)
-import           Snap.Core              hiding (addHeader, setHeader)
-import           Snap.Test              hiding (getResponseBody)
-import           System.Directory
-import           System.FilePath
-import           System.Process
 import qualified Control.Monad.State    as St
+import           Data.Aeson
 import qualified Data.ByteString.Base64 as B64
 import qualified Data.ByteString.Char8  as C8
 import qualified Data.HashMap.Strict    as HM
@@ -46,7 +39,14 @@ import qualified Data.Set               as S
 import qualified Data.Text              as T
 import qualified Data.Vector            as V
 import qualified Network.HTTP.Link      as HTTP
+import           Network.URI
+import           Prelude                hiding (put)
+import           Snap.Core              hiding (addHeader, setHeader)
+import           Snap.Test              hiding (getResponseBody)
 import qualified Snap.Test              as ST
+import           System.Directory
+import           System.FilePath
+import           System.Process
 import qualified Test.Hspec.Core.Spec   as Hs
 import qualified Test.Hspec.Snap        as Hs
 

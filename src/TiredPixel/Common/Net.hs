@@ -16,10 +16,10 @@ module TiredPixel.Common.Net (
 import           Control.Exception            (throw)
 import           Control.Monad.Trans.Resource (runResourceT)
 import           Data.Conduit                 (runConduit, (.|))
+import qualified Data.Conduit.Binary          as CB
 import           Network.HTTP.Conduit
 import           Network.HTTP.Types
 import           Network.URI                  hiding (path)
-import qualified Data.Conduit.Binary          as CB
 
 
 type Conn = Manager

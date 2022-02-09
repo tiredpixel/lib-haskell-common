@@ -6,22 +6,23 @@ module TiredPixel.Common.Isoxya.Streamer (
     ) where
 
 
-import Data.Aeson
-import Data.Time.Clock
-import TiredPixel.Common.URI
+import           Data.Aeson
+import           Data.Time.Clock
+import           TiredPixel.Common.URI
 
 
-data Streamer = Streamer {
-    streamerCrawlBegan    :: UTCTime,
-    streamerCrawlHref     :: Text,
-    streamerData          :: Value,
-    streamerProcessorHref :: Text,
-    streamerProcessorTag  :: Text,
-    streamerRetrieved     :: UTCTime,
-    streamerSiteHref      :: Text,
-    streamerSiteURL       :: URIAbsolute,
-    streamerURL           :: URIAbsolute
-    } deriving (Show)
+data Streamer = Streamer
+                  { streamerCrawlBegan    :: UTCTime
+                  , streamerCrawlHref     :: Text
+                  , streamerData          :: Value
+                  , streamerProcessorHref :: Text
+                  , streamerProcessorTag  :: Text
+                  , streamerRetrieved     :: UTCTime
+                  , streamerSiteHref      :: Text
+                  , streamerSiteURL       :: URIAbsolute
+                  , streamerURL           :: URIAbsolute
+                  }
+  deriving (Show)
 instance FromJSON Streamer where
     parseJSON = withObject "streamer" $ \j -> do
         fCrawl                <- j          .: "crawl"

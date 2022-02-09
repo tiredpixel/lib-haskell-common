@@ -4,8 +4,8 @@ module TiredPixel.Common.SQLite.Meta (
 
 
 import           Database.SQLite.Simple.Types
-import           TiredPixel.Common.SQLite.Query
 import qualified TiredPixel.Common.SQLite.Conn  as D
+import           TiredPixel.Common.SQLite.Query
 
 
 migrate :: [(Integer, D.Conn -> IO ())] -> Text -> D.Conn -> IO ()

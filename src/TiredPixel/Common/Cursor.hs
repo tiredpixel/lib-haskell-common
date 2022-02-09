@@ -4,10 +4,11 @@ module TiredPixel.Common.Cursor (
     ) where
 
 
-data Cursor = Cursor {
-    cursorPos :: Maybe (Either ByteString ByteString),
-    cursorLim :: Integer
-    } deriving (Show)
+data Cursor = Cursor
+                { cursorPos :: Maybe (Either ByteString ByteString)
+                , cursorLim :: Integer
+                }
+  deriving (Show)
 
 curse :: MonadIO m =>
     (Integer -> c -> m [a]) ->

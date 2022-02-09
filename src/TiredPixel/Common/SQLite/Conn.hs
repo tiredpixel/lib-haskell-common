@@ -11,7 +11,7 @@ import           Control.Exception      (bracket)
 import qualified Database.SQLite.Simple as S
 
 
-newtype Conn = ConnS {db :: S.Connection}
+newtype Conn = ConnS { db :: S.Connection }
 
 closeConn :: Conn -> IO ()
 closeConn (ConnS d) = S.close d

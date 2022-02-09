@@ -13,16 +13,17 @@ module TiredPixel.Common.Isoxya.Processor (
 
 
 import           Data.Aeson
+import qualified Data.ByteString.Base64 as B64
 import           Data.Fixed             (Pico)
 import           TiredPixel.Common.URI
-import qualified Data.ByteString.Base64 as B64
 
 
-data ProcessorI = ProcessorI {
-    processorIMeta   :: ProcessorIMeta,
-    processorIHeader :: ProcessorIHeader,
-    processorIBody   :: ProcessorIBody
-    } deriving (Show)
+data ProcessorI = ProcessorI
+                    { processorIMeta   :: ProcessorIMeta
+                    , processorIHeader :: ProcessorIHeader
+                    , processorIBody   :: ProcessorIBody
+                    }
+  deriving (Show)
 instance FromJSON ProcessorI where
     parseJSON = withObject "processor_i" $ \j -> do
         fMeta                  <- j     .:  "meta"
@@ -47,14 +48,15 @@ type ProcessorIBody = ByteString
 
 type ProcessorIHeader = Map Text Text
 
-data ProcessorIMeta = ProcessorIMeta {
-    processorIMetaConfig   :: Maybe Value,
-    processorIMetaDuration :: Maybe Pico,
-    processorIMetaError    :: Maybe Text,
-    processorIMetaMethod   :: Text,
-    processorIMetaStatus   :: Maybe Integer,
-    processorIMetaURL      :: URIAbsolute
-    } deriving (Show)
+data ProcessorIMeta = ProcessorIMeta
+                        { processorIMetaConfig   :: Maybe Value
+                        , processorIMetaDuration :: Maybe Pico
+                        , processorIMetaError    :: Maybe Text
+                        , processorIMetaMethod   :: Text
+                        , processorIMetaStatus   :: Maybe Integer
+                        , processorIMetaURL      :: URIAbsolute
+                        }
+  deriving (Show)
 instance ToJSON ProcessorIMeta where
     toJSON ProcessorIMeta{..} = object [
         "config"   .= processorIMetaConfig,
@@ -64,10 +66,11 @@ instance ToJSON ProcessorIMeta where
         "status"   .= processorIMetaStatus,
         "url"      .= processorIMetaURL]
 
-data ProcessorO = ProcessorO {
-    processorOData :: ProcessorOData,
-    processorOURLs :: Set ProcessorOURL
-    } deriving (Show)
+data ProcessorO = ProcessorO
+                    { processorOData :: ProcessorOData
+                    , processorOURLs :: Set ProcessorOURL
+                    }
+  deriving (Show)
 instance FromJSON ProcessorO where
     parseJSON = withObject "processor_o" $ \j -> do
         processorOData <- j .: "data"

@@ -27,19 +27,19 @@ module TiredPixel.Common.Snap.CoreUtil (
 
 
 import           Data.Aeson
+import qualified Data.ByteString.Char8    as C8
+import qualified Data.HashMap.Strict      as HM
 import           Data.Time.Clock
+import qualified Data.Time.Format         as Time
 import           Safe
 import           Snap.Core
 import           Snap.Extras.CoreUtils    (jsonResponse)
 import           Snap.Extras.JSON
 import           TiredPixel.Common.Cursor
-import qualified Data.ByteString.Char8    as C8
-import qualified Data.HashMap.Strict      as HM
-import qualified Data.Time.Format         as Time
 
 
-newtype ErrorC = ErrorC { errorCDebug :: Text
-    } deriving (Show)
+newtype ErrorC = ErrorC { errorCDebug :: Text }
+  deriving (Show)
 instance ToJSON ErrorC where
     toJSON o = object [
         "msg" .= errorCDebug o]
@@ -56,10 +56,10 @@ class ValidateJSON r where
     validateJSON :: MonadSnap m => Either Text r -> m (Either ErrorC r)
     validateJSON (Right r)  = validateJSONOk r
     validateJSON (Left err) = validateJSONErr err
-    
+
     validateJSONOk :: MonadSnap m => r -> m (Either ErrorC r)
     validateJSONOk r = return $ Right r
-    
+
     validateJSONErr :: MonadSnap m => Text -> m (Either ErrorC r)
     validateJSONErr err = return $ Left ErrorC {
         errorCDebug = err}
@@ -117,7 +117,7 @@ intErr ex = do
 
 mergeObject :: Value -> Value -> Value
 mergeObject (Object a) (Object b) = Object $ HM.unionWith mergeObject a b
-mergeObject _ b = b
+mergeObject _ b                   = b
 
 noContent :: MonadSnap m => m ()
 noContent = modifyResponse $ setResponseCode 204
@@ -137,7 +137,7 @@ parseReq = do
         pos = case (posN_, posP_) of
             (Just posN, _)       -> Just $ Right posN
             (Nothing, Just posP) -> Just $ Left  posP
-            _ -> Nothing
+            _                    -> Nothing
     return Cursor {
         cursorPos = pos,
         cursorLim = max limMin $ min limMax lim}

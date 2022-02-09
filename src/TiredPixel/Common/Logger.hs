@@ -4,7 +4,7 @@ module TiredPixel.Common.Logger (
     ) where
 
 
-import Control.Monad.Logger
+import           Control.Monad.Logger
 
 
 runLogger :: MonadIO m => LoggingT m a -> m a

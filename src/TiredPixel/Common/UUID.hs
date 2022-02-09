@@ -4,8 +4,8 @@ module TiredPixel.Common.UUID (
     ) where
 
 
-import Data.UUID
-import Data.UUID.V4
+import           Data.UUID
+import           Data.UUID.V4
 
 
 fromByteStringNil :: ByteString -> UUID

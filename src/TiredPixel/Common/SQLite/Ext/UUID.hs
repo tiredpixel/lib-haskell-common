@@ -4,11 +4,11 @@
 module TiredPixel.Common.SQLite.Ext.UUID () where
 
 
-import Data.UUID
-import Database.SQLite.Simple
-import Database.SQLite.Simple.FromField
-import Database.SQLite.Simple.Internal
-import Database.SQLite.Simple.ToField
+import           Data.UUID
+import           Database.SQLite.Simple
+import           Database.SQLite.Simple.FromField
+import           Database.SQLite.Simple.Internal
+import           Database.SQLite.Simple.ToField
 
 
 instance FromField UUID where

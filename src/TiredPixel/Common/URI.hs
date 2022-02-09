@@ -20,8 +20,8 @@ import qualified Network.URI           as URI
 import qualified Text.Regex            as R
 
 
-newtype URIAbsolute = URIAbsolute { unURIAbsolute :: URI.URI
-    } deriving (Show, Eq, Ord)
+newtype URIAbsolute = URIAbsolute { unURIAbsolute :: URI.URI }
+  deriving (Eq, Ord, Show)
 instance FromJSON URIAbsolute where
     parseJSON = withText "URIAbsolute" $
         maybe (fail "invalid URIAbsolute") (pure . URIAbsolute) .
@@ -29,8 +29,8 @@ instance FromJSON URIAbsolute where
 instance ToJSON URIAbsolute where
     toJSON = toJSON . unURIAbsolute
 
-newtype URIPage = URIPage { unURIPage :: URI.URI
-    } deriving (Show, Eq, Ord)
+newtype URIPage = URIPage { unURIPage :: URI.URI }
+  deriving (Eq, Ord, Show)
 instance FromJSON URIPage where
     parseJSON = withText "URIPage" $
         maybe (fail "invalid URIPage") (pure . URIPage) .
@@ -38,8 +38,8 @@ instance FromJSON URIPage where
 instance ToJSON URIPage where
     toJSON = toJSON . unURIPage
 
-newtype URIReference = URIReference { unURIReference :: URI.URI
-    } deriving (Show, Eq, Ord)
+newtype URIReference = URIReference { unURIReference :: URI.URI }
+  deriving (Eq, Ord, Show)
 instance FromJSON URIReference where
     parseJSON = withText "URIReference" $
         maybe (fail "invalid URIReference") (pure . URIReference) .
@@ -47,8 +47,8 @@ instance FromJSON URIReference where
 instance ToJSON URIReference where
     toJSON = toJSON . unURIReference
 
-newtype URIRelative = URIRelative { unURIRelative :: URI.URI
-    } deriving (Show, Eq, Ord)
+newtype URIRelative = URIRelative { unURIRelative :: URI.URI }
+  deriving (Eq, Ord, Show)
 instance FromJSON URIRelative where
     parseJSON = withText "URIRelative" $
         maybe (fail "invalid URIRelative") (pure . URIRelative) .
@@ -56,8 +56,8 @@ instance FromJSON URIRelative where
 instance ToJSON URIRelative where
     toJSON = toJSON . unURIRelative
 
-newtype URISite = URISite { unURISite :: URI.URI
-    } deriving (Show, Eq, Ord)
+newtype URISite = URISite { unURISite :: URI.URI }
+  deriving (Eq, Ord, Show)
 instance FromJSON URISite where
     parseJSON = withText "URISite" $
         maybe (fail "invalid URISite") (pure . URISite) .

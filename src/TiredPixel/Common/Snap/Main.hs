@@ -5,12 +5,12 @@ module TiredPixel.Common.Snap.Main (
     ) where
 
 
-import Control.Concurrent      (ThreadId, killThread)
-import Prelude                 hiding (init)
-import Snap.Core
-import Snap.Http.Server.Config
-import System.IO
-import System.Posix.Signals
+import           Control.Concurrent      (ThreadId, killThread)
+import           Prelude                 hiding (init)
+import           Snap.Core
+import           Snap.Http.Server.Config
+import           System.IO
+import           System.Posix.Signals
 
 
 config :: MonadSnap m => Config m a

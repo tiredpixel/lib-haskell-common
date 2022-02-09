@@ -4,11 +4,11 @@
 module TiredPixel.Common.SQLite.Ext.URI () where
 
 
-import Database.SQLite.Simple.FromField
-import Database.SQLite.Simple.Internal
-import Database.SQLite.Simple.ToField
-import Database.SQLite3
-import Network.URI
+import           Database.SQLite.Simple.FromField
+import           Database.SQLite.Simple.Internal
+import           Database.SQLite.Simple.ToField
+import           Database.SQLite3
+import           Network.URI
 
 
 instance FromField URI where
