@@ -14,8 +14,8 @@ module TiredPixel.Common.Snap.Test (
 import           Control.Lens
 import           Data.Aeson                      hiding ((.=))
 import           Data.Aeson.Lens
-import           Prelude                         hiding (One, get, put, uncons,
-                                                  universe, (??))
+import           Prelude                         hiding (One, get, head, put,
+                                                  uncons, universe, (??))
 import           Snap.Core                       hiding (addHeader, pass,
                                                   setContentType, setHeader)
 import           Snap.Test                       hiding (getResponseBody)
