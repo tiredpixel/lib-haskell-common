@@ -42,8 +42,8 @@ import qualified Network.HTTP.Link      as HTTP
 import           Network.URI
 import           Prelude                hiding (put)
 import           Snap.Core              hiding (addHeader, setHeader)
-import           Snap.Test              hiding (getResponseBody)
 import qualified Snap.Test              as ST
+import           Snap.Test              hiding (getResponseBody)
 import           System.Directory
 import           System.FilePath
 import           System.Process
